@@ -1,5 +1,5 @@
 
-package connect4;
+package battleship;
 
 import java.awt.Color;
 
@@ -25,6 +25,14 @@ public class Player {
     public static Player GetCurrentPlayer()
     {
         return(currentTurn);
+    }
+    public static Player getPlayer1()
+    {
+        return(players[0]);
+    }
+    public static Player getPlayer2()
+    {
+        return(players[1]);
     }
     public static void SwitchTurn()
     {
