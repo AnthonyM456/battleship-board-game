@@ -103,8 +103,11 @@ public class Battleship extends JFrame implements Runnable {
         int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
         int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
 //fill border
+    if (Player.GetCurrentPlayer() == Player.getPlayer1())
         g.setColor(Color.GRAY);
-        g.fillPolygon(x, y, 4);
+    else
+        g.setColor(Color.blue);
+    g.fillPolygon(x, y, 4);
           
 // draw border
         g.setColor(Color.black);
@@ -172,7 +175,6 @@ public class Battleship extends JFrame implements Runnable {
             
             reset();
         }
-        
     if(bgSound.donePlaying)
         bgSound = new sound("starwars.wav");
 
