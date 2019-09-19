@@ -5,6 +5,11 @@ import java.io.*;
 import java.awt.*;
 import java.awt.geom.*;
 import java.awt.event.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.SourceDataLine;
 import javax.swing.*;
 
 public class Battleship extends JFrame implements Runnable {
@@ -14,6 +19,9 @@ public class Battleship extends JFrame implements Runnable {
 
 //    Player playerRed;
 //    Player playerBlack;
+    
+    sound bgSound = null;
+    Image WaterBgGif;
 
     public static void main(String[] args) {
         Battleship frame = new Battleship();
@@ -95,8 +103,9 @@ public class Battleship extends JFrame implements Runnable {
         int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
         int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
 //fill border
-        g.setColor(Color.white);
-        g.fillPolygon(x, y, 4);
+//        g.setColor(Color.GRAY);
+//        g.fillPolygon(x, y, 4);
+          
 // draw border
         g.setColor(Color.black);
         g.drawPolyline(x, y, 5);
@@ -106,9 +115,10 @@ public class Battleship extends JFrame implements Runnable {
             return;
         }
         
-              
+        g.drawImage(WaterBgGif,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),this);      
         Board.Draw(g);
-
+        
+        
         gOld.drawImage(image, 0, 0, null);
     }
 
@@ -133,6 +143,22 @@ public class Battleship extends JFrame implements Runnable {
         Board.Reset();
     }
 /////////////////////////////////////////////////////////////////////////
+    public void drawImage(Image image,int xpos,int ypos,double rot,double xscale,
+                double yscale) {
+            int width = image.getWidth(this);
+            int height = image.getHeight(this);
+            g.translate(xpos,ypos);
+            g.rotate(rot  * Math.PI/180.0);
+            g.scale( xscale , yscale );
+
+            g.drawImage(image,-width/2,-height/2,
+            width,height,this);
+
+            g.scale( 1.0/xscale,1.0/yscale );
+            g.rotate(-rot  * Math.PI/180.0);
+            g.translate(-xpos,-ypos);
+        }
+/////////////////////////////////////////////////////////////////////////
     public void animate() {
 
         if (animateFirstTime) {
@@ -141,10 +167,14 @@ public class Battleship extends JFrame implements Runnable {
                 Window.xsize = getSize().width;
                 Window.ysize = getSize().height;
             }
-
+            bgSound = new sound("starwars.wav");
+            WaterBgGif = Toolkit.getDefaultToolkit().getImage("./WaterBgGif.gif");
+            
             reset();
-
         }
+        
+    if(bgSound.donePlaying)
+        bgSound = new sound("starwars.wav");
 
         
     }
@@ -165,7 +195,46 @@ public class Battleship extends JFrame implements Runnable {
     }
 
 }
+///////////////////////////////////////////////////////////////////////////
+class sound implements Runnable {
+    Thread myThread;
+    File soundFile;
+    public boolean donePlaying = false;
+    sound(String _name)
+    {
+        soundFile = new File(_name);
+        myThread = new Thread(this);
+        myThread.start();
+        
+    }
+    public void run()
+    {
+        try {
+        AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+        AudioFormat format = ais.getFormat();
+//        System.out.println("Format: " + format);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
+        source.open(format);
+        source.start();
+        int read = 0;
+        byte[] audioData = new byte[16384];
+        while (read > -1){
+            read = ais.read(audioData,0,audioData.length);
+            if (read >= 0) {
+                source.write(audioData,0,read);
+            }
+        }
+        donePlaying = true;
 
-
+        source.drain();
+        source.close();
+        }
+        catch (Exception exc) {
+            System.out.println("error: " + exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
+}
 
 
