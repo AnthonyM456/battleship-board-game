@@ -1,5 +1,5 @@
 
-package connect4;
+package battleship;
 import java.awt.*;
 
 public class Board {
@@ -87,10 +87,13 @@ public class Board {
         int theRow = NUM_ROWS-1;
         if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0 && zrow < NUM_COLUMNS){
 
-            while (board[theRow][zcol] != null && theRow > 0)
+            while (theRow >= 0 && board[theRow][zcol] != null)
             {
                 theRow--; 
             }
+            if(theRow < 0)
+                return;
+            
             board[theRow][zcol] = new Piece(Player.GetCurrentPlayer().getColor());
             Player.SwitchTurn();
         }
