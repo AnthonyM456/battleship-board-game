@@ -84,16 +84,7 @@ public class Board {
         int zcol = (xpixel-Window.getX(0))/xdelta;
         int zrow = (ypixel-Window.getY(0))/ydelta;
 
-        int theRow = NUM_ROWS-1;
         if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0 && zrow < NUM_COLUMNS){
-
-            while (theRow >= 0 && board[theRow][zcol] != null)
-            {
-                theRow--; 
-            }
-            if(theRow < 0)
-                return;
-            
             board[theRow][zcol] = new Piece(Player.GetCurrentPlayer().getColor());
             Player.SwitchTurn();
         }
