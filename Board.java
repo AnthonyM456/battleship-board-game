@@ -7,22 +7,33 @@ public class Board {
     
     private final static int NUM_ROWS = 8;
     private final static int NUM_COLUMNS = 8;      
-    private static Piece board[][] = new Piece[NUM_ROWS][NUM_COLUMNS];
-   
+    private static Piece board[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][2];
+    private static int BoardSel;
 
     public static void Reset() {
 //        thePiece = new Piece(Color.red);
 //clear the board.
+    for(int b=0;b<1;b++)
         for (int zrow=0;zrow<NUM_ROWS;zrow++)
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++)
-                board[zrow][zcol] = null;
+                board[zrow][zcol][b] = null;
+        
+        BoardSel = 0;
+        board[2][3][0] = new Piece(Color.red);
+        
     }
 
     public static void Animate(){
         int ydelta = Window.getHeight2()/NUM_ROWS;
         int xdelta = Window.getWidth2()/NUM_COLUMNS;
         
+        if(Player.GetCurrentPlayer() == Player.getPlayer1())
+            BoardSel = 0;
+        else if(Player.GetCurrentPlayer() == Player.getPlayer2())
+            BoardSel = 1;
+        
     }
+    
     
     public static void Draw(Graphics2D g) {
  //draw grid
@@ -41,15 +52,18 @@ public class Board {
             g.drawLine(Window.getX(zi*xdelta),Window.getY(0),
                     Window.getX(zi*xdelta),Window.getY(Window.getHeight2()));
         }
+    for(int b=0;b<1;b++)
+    {
         for (int zrow=0;zrow<NUM_ROWS;zrow++)
         {
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++)        
             {
-                if (board[zrow][zcol] != null)
-                    board[zrow][zcol].draw(g, zrow, zcol, xdelta, ydelta);
+                if (board[zrow][zcol][BoardSel] != null)
+                    board[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta);
                     Player.SwitchTurn();
             }
         }
+    }
     }
         public static void RemovePiecePixel (int xpixel, int ypixel) {
 
@@ -59,17 +73,19 @@ public class Board {
         int zcol = (xpixel-Window.getX(0))/xdelta;
         int zrow = (ypixel-Window.getY(0))/ydelta;    
              
-                if(Player.GetCurrentPlayer().getColor() != board[zrow][zcol].getColor())
+
+                if(Player.GetCurrentPlayer().getColor() != board[zrow][zcol][BoardSel].getColor())
                 {
-                    board[zrow][zcol] = null;
+                    board[zrow][zcol][BoardSel] = null;
                     //work only with zcol
                     int theRow = zrow-1;
-                    while (board[theRow][zcol] != null)
+                    while (board[theRow][zcol][BoardSel] != null)
                     {
                         theRow--;
-                        board[theRow][zcol] = board[zrow][zcol];
+                        board[theRow][zcol][BoardSel] = board[zrow][zcol][BoardSel];
                     }
                 }
+        
 
                 
             
@@ -84,9 +100,12 @@ public class Board {
         int zcol = (xpixel-Window.getX(0))/xdelta;
         int zrow = (ypixel-Window.getY(0))/ydelta;
 
-        if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0 && zrow < NUM_COLUMNS){
-            board[theRow][zcol] = new Piece(Player.GetCurrentPlayer().getColor());
-            Player.SwitchTurn();
+        if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0){
+
+
+                board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+                Player.SwitchTurn();
+            
         }
 
     } 
