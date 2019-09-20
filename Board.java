@@ -13,7 +13,7 @@ public class Board {
     public static void Reset() {
 //        thePiece = new Piece(Color.red);
 //clear the board.
-    for(int b=0;b<1;b++)
+    for(int b=0;b<2;b++)
         for (int zrow=0;zrow<NUM_ROWS;zrow++)
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++)
                 board[zrow][zcol][b] = null;
@@ -52,8 +52,8 @@ public class Board {
             g.drawLine(Window.getX(zi*xdelta),Window.getY(0),
                     Window.getX(zi*xdelta),Window.getY(Window.getHeight2()));
         }
-    for(int b=0;b<1;b++)
-    {
+
+
         for (int zrow=0;zrow<NUM_ROWS;zrow++)
         {
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++)        
@@ -63,7 +63,7 @@ public class Board {
                     Player.SwitchTurn();
             }
         }
-    }
+    
     }
         public static void RemovePiecePixel (int xpixel, int ypixel) {
 
