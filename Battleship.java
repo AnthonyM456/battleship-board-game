@@ -20,10 +20,8 @@ public class Battleship extends JFrame implements Runnable {
 //    Player playerRed;
 //    Player playerBlack;
     
-    sound bgSound;
-    sound MisExplo;
-    Image WaterBgGif1;
-    Image WaterBgGif2;
+    
+
 
     public static void main(String[] args) {
         Battleship frame = new Battleship();
@@ -37,28 +35,24 @@ public class Battleship extends JFrame implements Runnable {
             public void mousePressed(MouseEvent e) {
 
                 if (e.BUTTON1 == e.getButton() ) {
-                    //work on this, not switch board
                     
                     if(Menu.gameStart()){
-                        if(Board.MisCollision(e.getX(), e.getY())){
-                           MisExplo = new sound("artillery_strike_far_01.wav");                        
-                           Board.RemovePiecePixel(e.getX(),e.getY());
-                           Board.BoardSwitch();
+                        if(!Board.MisCollision(e.getX(), e.getY())){
+                        Board.AddPiecePixel(e.getX(),e.getY());  
 
-                            }
+                        }
                         else
-                            {
-                              Board.AddPiecePixel(e.getX(),e.getY());  
-                              Board.BoardSwitch();
-                            }
+                        {
+                          Board.ExplosionSound();
+                          Board.RemovePiecePixel(e.getX(),e.getY()); 
+
+                        }
+
                     }
-                    Menu.checkClick(e.getX(), e.getY());
-                                        
+                    Menu.checkClick(e.getX(), e.getY());                  
                 }
 
                 if (e.BUTTON3 == e.getButton()) {
-                    
-                    
                 }
                 repaint();
             }
@@ -113,40 +107,10 @@ public class Battleship extends JFrame implements Runnable {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
+
+    Board.PlayerPaint(g, this);
         
-if(Player.GetCurrentPlayer() == Player.getPlayer1()){        
-//fill background
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Window.xsize, Window.ysize);
-
-        int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
-        int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
-//fill border
-//        g.setColor(Color.GRAY);
-//        g.fillPolygon(x, y, 4);
-        g.drawImage(WaterBgGif1,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),this); 
-// draw border
-        g.setColor(Color.black);
-        g.drawPolyline(x, y, 5);
-}
-else if(Player.GetCurrentPlayer() == Player.getPlayer2())
-{
-//fill background
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Window.xsize, Window.ysize);
-
-        int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
-        int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
-//fill border
-//        g.setColor(Color.blue);
-//        g.fillPolygon(x, y, 4);
-        g.drawImage(WaterBgGif2,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),this); 
-
-// draw border
-        g.setColor(Color.black);
-        g.drawPolyline(x, y, 5);
-            
-}    
+ 
     if (animateFirstTime) {
         gOld.drawImage(image, 0, 0, null);
         return;
@@ -206,17 +170,10 @@ else if(Player.GetCurrentPlayer() == Player.getPlayer2())
                 Window.xsize = getSize().width;
                 Window.ysize = getSize().height;
             }
-            bgSound = new sound("loadout_ambient.wav");
-            WaterBgGif1 = Toolkit.getDefaultToolkit().getImage("./WaterBgGif.gif");
-            WaterBgGif2 = Toolkit.getDefaultToolkit().getImage("./OceanBG.gif");
-            
-            
+            Board.Init();
             reset();
         }
-        
-    if(bgSound.donePlaying)
-        bgSound = new sound("loadout_ambient.wav");
-    
+
     Board.Animate();
     
     
@@ -240,45 +197,7 @@ else if(Player.GetCurrentPlayer() == Player.getPlayer2())
 
 }
 ///////////////////////////////////////////////////////////////////////////
-class sound implements Runnable {
-    Thread myThread;
-    File soundFile;
-    public boolean donePlaying = false;
-    sound(String _name)
-    {
-        soundFile = new File(_name);
-        myThread = new Thread(this);
-        myThread.start();
-        
-    }
-    public void run()
-    {
-        try {
-        AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
-        AudioFormat format = ais.getFormat();
-//        System.out.println("Format: " + format);
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-        SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
-        source.open(format);
-        source.start();
-        int read = 0;
-        byte[] audioData = new byte[16384];
-        while (read > -1){
-            read = ais.read(audioData,0,audioData.length);
-            if (read >= 0) {
-                source.write(audioData,0,read);
-            }
-        }
-        donePlaying = true;
 
-        source.drain();
-        source.close();
-        }
-        catch (Exception exc) {
-            System.out.println("error: " + exc.getMessage());
-            exc.printStackTrace();
-        }
-    }
-}
+
 
 
