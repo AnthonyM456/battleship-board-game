@@ -5,8 +5,8 @@ import java.awt.*;
 public class Board {
     private final static int NUM_CONNECT_WIN = 4;    
     
-    private final static int NUM_ROWS = 8;
-    private final static int NUM_COLUMNS = 8;      
+    private final static int NUM_ROWS = 10;
+    private final static int NUM_COLUMNS = 10;      
     private static Piece board[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][2];
     private static int BoardSel;
 
@@ -19,7 +19,7 @@ public class Board {
                 board[zrow][zcol][b] = null;
         
         BoardSel = 0;
-        board[2][3][0] = new Piece(Color.red);
+//        board[2][3][0] = new Piece(Color.red);
         
     }
 
@@ -27,10 +27,20 @@ public class Board {
         int ydelta = Window.getHeight2()/NUM_ROWS;
         int xdelta = Window.getWidth2()/NUM_COLUMNS;
         
+        System.out.println(Window.getWidth2() + " " + Window.getHeight2());
+        
+    }
+    
+    public static void BoardSwitch(){
+        
+        
         if(Player.GetCurrentPlayer() == Player.getPlayer1())
-            BoardSel = 0;
-        else if(Player.GetCurrentPlayer() == Player.getPlayer2())
             BoardSel = 1;
+        else if(Player.GetCurrentPlayer() == Player.getPlayer2())
+            BoardSel = 0;
+        
+        
+        
         
     }
     
@@ -59,12 +69,31 @@ public class Board {
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++)        
             {
                 if (board[zrow][zcol][BoardSel] != null)
+                {
                     board[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta);
+ 
+                    
+                }
                     Player.SwitchTurn();
             }
         }
     
     }
+    
+        public static boolean MisCollision(int xpixel, int ypixel){
+            int ydelta = Window.getHeight2()/NUM_ROWS;
+            int xdelta = Window.getWidth2()/NUM_COLUMNS;    
+            
+            int zcol = (xpixel-Window.getX(0))/xdelta;
+            int zrow = (ypixel-Window.getY(0))/ydelta;    
+            System.out.println(zrow + " " + zcol);
+            
+            if(board[zrow][zcol][BoardSel] != null)
+                return true;
+            else 
+                return false;
+        }
+        
         public static void RemovePiecePixel (int xpixel, int ypixel) {
 
         int ydelta = Window.getHeight2()/NUM_ROWS;
@@ -74,24 +103,19 @@ public class Board {
         int zrow = (ypixel-Window.getY(0))/ydelta;    
              
 
-                if(Player.GetCurrentPlayer().getColor() != board[zrow][zcol][BoardSel].getColor())
-                {
-                    board[zrow][zcol][BoardSel] = null;
-                    //work only with zcol
-                    int theRow = zrow-1;
-                    while (board[theRow][zcol][BoardSel] != null)
-                    {
-                        theRow--;
-                        board[theRow][zcol][BoardSel] = board[zrow][zcol][BoardSel];
-                    }
-                }
-        
-
-                
-            
+        board[zrow][zcol][BoardSel] = null;
+        Player.SwitchTurn();    
         
         }
+        public static int xdelta(){
+            int xdelta = Window.getWidth2()/NUM_COLUMNS;
+            return(xdelta);
+        }
     
+        public static int ydelta(){
+            int ydelta = Window.getHeight2()/NUM_ROWS;
+            return(ydelta);
+        }
         public static void AddPiecePixel(int xpixel,int ypixel) {
         
         int ydelta = Window.getHeight2()/NUM_ROWS;
@@ -102,8 +126,10 @@ public class Board {
 
         if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0){
 
-
+                
                 board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+
+                
                 Player.SwitchTurn();
             
         }
