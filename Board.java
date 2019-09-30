@@ -5,7 +5,6 @@ public class Board {
     private final static int NUM_ROWS = 10;
     private final static int NUM_COLUMNS = 10;      
     public static Piece board[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][2];
-    public static Ship ship[][][] = new Ship[NUM_ROWS][NUM_COLUMNS][2];
     public static int BoardSel;
 
     public static void Reset() {
