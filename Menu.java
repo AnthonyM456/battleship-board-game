@@ -112,12 +112,12 @@ public class Menu {
         int zrow = (ypixel-Window.getY(0));
         System.out.println(zcol+  " " + zrow);
         if (zcol > 35 && zcol < 265 && zrow > 400 && zrow < 540){
-            System.out.println("butt"); 
+            //System.out.println("butt"); 
             gameStart = true;
         }
         else if (zcol > 335 && zcol < 565 && zrow > 400 && zrow < 540 && !gameStart)
         {
-            System.out.println("cheeks");
+            //System.out.println("cheeks");
             if (tutorial)
                 tutorial = false;
             else 

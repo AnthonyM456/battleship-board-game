@@ -1,4 +1,4 @@
-package connect4;
+package battleship;
 import java.awt.*;
 
 public class Piece {
@@ -15,7 +15,7 @@ public class Piece {
     }
 
     public void draw(Graphics2D g,int row,int column, int xdelta,int ydelta) {
-        g.setColor(color); 
+        g.setColor(color);
         g.fillOval( Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
           
     }
