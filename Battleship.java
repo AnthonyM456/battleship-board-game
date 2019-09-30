@@ -108,7 +108,6 @@ public class Battleship extends JFrame implements Runnable {
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
 
-    Board.PlayerPaint(g, this);
         
  
     if (animateFirstTime) {
@@ -116,8 +115,8 @@ public class Battleship extends JFrame implements Runnable {
         return;
     }
         
-             
-        Board.Draw(g);
+        Board.PlayerPaint(g, this);     
+        Board.Draw(g, this);
         Menu.Draw(g, this);
         
         
@@ -171,6 +170,8 @@ public class Battleship extends JFrame implements Runnable {
                 Window.ysize = getSize().height;
             }
             Board.Init();
+            Piece.Init();
+            Menu.Init();
             reset();
         }
 
