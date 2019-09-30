@@ -20,8 +20,8 @@ public class Battleship extends JFrame implements Runnable {
 //    Player playerRed;
 //    Player playerBlack;
     
-    
-
+    sound bgSound = null;
+    Image WaterBgGif;
 
     public static void main(String[] args) {
         Battleship frame = new Battleship();
@@ -35,24 +35,19 @@ public class Battleship extends JFrame implements Runnable {
             public void mousePressed(MouseEvent e) {
 
                 if (e.BUTTON1 == e.getButton() ) {
-                    
-                    if(Menu.gameStart()){
-                        if(!Board.MisCollision(e.getX(), e.getY())){
-                        Board.AddPiecePixel(e.getX(),e.getY());  
-
-                        }
-                        else
-                        {
-                          Board.ExplosionSound();
-                          Board.RemovePiecePixel(e.getX(),e.getY()); 
-
-                        }
+                    if (Menu.gameStart())
+                    {
+                        Hover.PlaceShip(e.getX(),e.getY());
+                        Hover.Click();
 
                     }
-                    Menu.checkClick(e.getX(), e.getY());                  
+                        Menu.checkClick(e.getX(),e.getY());
+                    
+                                        
                 }
 
                 if (e.BUTTON3 == e.getButton()) {
+                    Board.RemovePiecePixel(e.getX(),e.getY());
                 }
                 repaint();
             }
@@ -61,14 +56,16 @@ public class Battleship extends JFrame implements Runnable {
 
     addMouseMotionListener(new MouseMotionAdapter() {
       public void mouseDragged(MouseEvent e) {
-
         repaint();
       }
     });
 
     addMouseMotionListener(new MouseMotionAdapter() {
-      public void mouseMoved(MouseEvent e) {
-
+        public void mouseMoved(MouseEvent e) {
+            if (Menu.gameStart()){
+                Hover.Move();
+                Hover.Highlight(e.getX(),e.getY());
+            }
         repaint();
       }
     });
@@ -80,6 +77,11 @@ public class Battleship extends JFrame implements Runnable {
                 } else if (e.VK_DOWN == e.getKeyCode()) {
                 } else if (e.VK_LEFT == e.getKeyCode()) {
                 } else if (e.VK_RIGHT == e.getKeyCode()) {
+                } else if (e.VK_SPACE == e.getKeyCode()) {
+                } else if (e.VK_R == e.getKeyCode()) {
+                    Hover.Move();
+                    Hover.rotateShip();
+                    Hover.Highlight(Hover.mouseGetX(),Hover.mouseGetY());
                 } else if (e.VK_ESCAPE == e.getKeyCode()) {
                     reset();
                 }
@@ -87,7 +89,7 @@ public class Battleship extends JFrame implements Runnable {
             }
         });
         init();
-        start();
+        start();                                                                                
     }
     Thread relaxer;
 ////////////////////////////////////////////////////////////////////////////
@@ -107,21 +109,38 @@ public class Battleship extends JFrame implements Runnable {
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                     RenderingHints.VALUE_ANTIALIAS_ON);
         }
+//fill background
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, Window.xsize, Window.ysize);
 
-    Board.PlayerPaint(g, this);
+        int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
+        int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
+//fill border
+    if (Player.GetCurrentPlayer() == Player.getPlayer1())
+        g.setColor(Color.GRAY);
+    else
+        g.setColor(Color.blue);
+    g.fillPolygon(x, y, 4);
+          
+// draw border
+        g.setColor(Color.black);
+        g.drawPolyline(x, y, 5);
+
+        if (animateFirstTime) {
+            gOld.drawImage(image, 0, 0, null);
+            return;
+        }
         
- 
-    if (animateFirstTime) {
-        gOld.drawImage(image, 0, 0, null);
-        return;
-    }
-        
-             
+        g.drawImage(WaterBgGif,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),this);     
         Board.Draw(g);
-        Menu.Draw(g, this);
-        
-        
+        Hover.Draw(g);
+        Menu.Draw(g,this);
+        if (Menu.gameStart())
+        {
+            WaterBgGif = Toolkit.getDefaultToolkit().getImage("./WaterBgGif.gif");
+        }
         gOld.drawImage(image, 0, 0, null);
+//        System.out.println(bgSound+"");
     }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -170,14 +189,15 @@ public class Battleship extends JFrame implements Runnable {
                 Window.xsize = getSize().width;
                 Window.ysize = getSize().height;
             }
-            Board.Init();
+            
             reset();
         }
-
-    Board.Animate();
-    
-    
-        
+            if (!Menu.gameStart())
+            {
+                bgSound = null;
+            }
+            else
+                bgSound = new sound("starwars.wav");
     }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -197,7 +217,45 @@ public class Battleship extends JFrame implements Runnable {
 
 }
 ///////////////////////////////////////////////////////////////////////////
+class sound implements Runnable {
+    Thread myThread;
+    File soundFile;
+    public boolean donePlaying = false;
+    sound(String _name)
+    {
+        soundFile = new File(_name);
+        myThread = new Thread(this);
+        myThread.start();
+        
+    }
+    public void run()
+    {
+        try {
+        AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+        AudioFormat format = ais.getFormat();
+//        System.out.println("Format: " + format);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+        SourceDataLine source = (SourceDataLine) AudioSystem.getLine(info);
+        source.open(format);
+        source.start();
+        int read = 0;
+        byte[] audioData = new byte[16384];
+        while (read > -1){
+            read = ais.read(audioData,0,audioData.length);
+            if (read >= 0) {
+                source.write(audioData,0,read);
+            }
+        }
+        donePlaying = true;
 
-
+        source.drain();
+        source.close();
+        }
+        catch (Exception exc) {
+            System.out.println("error: " + exc.getMessage());
+            exc.printStackTrace();
+        }
+    }
+}
 
 
