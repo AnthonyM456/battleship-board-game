@@ -7,7 +7,6 @@ public class Player {
     private static Player currentTurn;
     private static Player players[] = new Player[2];
     private Color color;
-    private Ship ship;
 
 
     public static void Reset()
