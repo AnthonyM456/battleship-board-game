@@ -19,6 +19,7 @@ public class Board {
     private static Image WaterBgGif1;
     private static Image WaterBgGif2;
     
+    
     private static sound bgSound;
     private static sound MisExplo;
     
@@ -63,7 +64,7 @@ public class Board {
     }
     
     
-    public static void Draw(Graphics2D g) {
+    public static void Draw(Graphics2D g, Battleship thisObj) {
  //draw grid
         int ydelta = Window.getHeight2()/NUM_ROWS;
         int xdelta = Window.getWidth2()/NUM_COLUMNS;
@@ -88,8 +89,8 @@ public class Board {
             {
                 if (board[zrow][zcol][BoardSel] != null)
                 {
-                    board[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta);
- 
+                    board[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta, thisObj);
+//                    g.drawImage(battleship_blue,Window.getX(0)+xdelta*zcol, Window.getY(0)+ydelta*zrow,xdelta,ydelta,thisObj);   
                     
                 }
                     Player.SwitchTurn();
@@ -106,10 +107,13 @@ public class Board {
             int zrow = (ypixel-Window.getY(0))/ydelta;    
             System.out.println(zrow + " " + zcol);
             
+            if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0){
+            
             if(board[zrow][zcol][BoardSel] != null)
                 return true;
-            else 
-                return false;
+           
+            }
+            return false;
         }
         
         public static void RemovePiecePixel (int xpixel, int ypixel) {
@@ -122,6 +126,9 @@ public class Board {
              
 
         board[zrow][zcol][BoardSel] = null;
+        board[zrow][zcol][BoardSel] = new Piece(Color.GRAY);
+        
+        
         Board.BoardSwitch();
         Player.SwitchTurn(); 
         
@@ -195,6 +202,8 @@ else if(Player.GetCurrentPlayer() == Player.getPlayer2())
     public static void Init(){
         WaterBgGif1 = Toolkit.getDefaultToolkit().getImage("./WaterBgGif.gif");
         WaterBgGif2 = Toolkit.getDefaultToolkit().getImage("./OceanBG.gif");
+        
+        
         
         bgSound = new sound("loadout_ambient.wav");
     }
