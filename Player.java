@@ -36,10 +36,14 @@ public class Player {
     }
     public static void SwitchTurn()
     {
-                if(currentTurn == players[0])
-                    currentTurn = players[1];
-                else
-                    currentTurn = players[0];
+        if (Hover.getShrink() >= 2)
+        {
+            if(currentTurn == players[0])
+                currentTurn = players[1];
+            else
+                currentTurn = players[0];
+            
+        } 
     }    
     Player(Color _color)
     {
