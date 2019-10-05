@@ -49,7 +49,7 @@ public class Battleship extends JFrame implements Runnable {
                         else
                         {
 //                            Board.ExplosionSound_MISS(e.getX(), e.getY());
-                            Board.AddPiecePixel(e.getX(),e.getY());  
+                               Board.AddPiecePixel(e.getX(),e.getY()); 
 
                         }
 
@@ -73,6 +73,10 @@ public class Battleship extends JFrame implements Runnable {
 
     addMouseMotionListener(new MouseMotionAdapter() {
       public void mouseMoved(MouseEvent e) {
+          if (Menu.gameStart()){
+          Board.Move();
+          Board.Hover(e.getX(), e.getY());
+          }
 
         repaint();
       }
@@ -89,6 +93,8 @@ public class Battleship extends JFrame implements Runnable {
                     reset();
                 } else if (e.VK_SPACE == e.getKeyCode()) {
                         Board.BoardSwitchSpace();
+                } else if (e.VK_R == e.getKeyCode()) {
+                    Board.rotateShip();
                 }
                 repaint();
             }

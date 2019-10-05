@@ -110,7 +110,7 @@ public class Menu {
         int ydelta = Board.ydelta();
         int zcol = (xpixel-Window.getX(0));
         int zrow = (ypixel-Window.getY(0));
-        System.out.println(zcol+  " " + zrow);
+//        System.out.println(zcol+  " " + zrow);
         if (zcol > 35 && zcol < 265 && zrow > 400 && zrow < 540){
             System.out.println("butt"); 
             gameStart = true;

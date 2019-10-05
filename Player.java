@@ -5,7 +5,7 @@ import java.awt.Color;
 
 public class Player {
     private static Player currentTurn;
-    private static Player players[] = new Player[2];
+    private static Player players[] = new Player[3];
     private Color color;    
     
     
@@ -16,6 +16,9 @@ public class Player {
         {
             players[0] = new Player(Color.red);
             players[1] = new Player(Color.black);
+            players[2] = new Player(Color.gray);
+
+            
         }
         currentTurn = players[0];
         
@@ -34,12 +37,17 @@ public class Player {
     {
         return(players[1]);
     }
+    public static Player getPlayer3()
+    {
+        return(players[2]);
+    }
     public static void SwitchTurn()
     {
                 if(currentTurn == players[0])
                     currentTurn = players[1];
-                else
+                else if(currentTurn == players[1])
                     currentTurn = players[0];
+
     }    
     Player(Color _color)
     {
