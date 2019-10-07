@@ -11,9 +11,9 @@ import javax.sound.sampled.SourceDataLine;
 public class Board {
     private final static int NUM_CONNECT_WIN = 4;    
     
-    private final static int NUM_ROWS = 10;
-    private final static int NUM_COLUMNS = 10;      
-    private static Piece board[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][2];
+    private final static int NUM_ROWS = 12;
+    private final static int NUM_COLUMNS = 12;      
+    private static Piece board[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][4];
     private static int BoardSel;
 
     private static Image WaterBgGif1;
@@ -22,6 +22,9 @@ public class Board {
     
     private static sound bgSound;
     private static sound MisExplo;
+    
+    private static int Shrink = 3;
+    private static int Turns = 0;
     
     public static void Reset() {
 //        thePiece = new Piece(Color.red);
@@ -32,6 +35,9 @@ public class Board {
                 board[zrow][zcol][b] = null;
         
         BoardSel = 0;
+        Shrink = 3;
+        Turns = 0;
+        
 //        board[2][3][0] = new Piece(Color.red);
         
     }
@@ -40,27 +46,53 @@ public class Board {
         int ydelta = Window.getHeight2()/NUM_ROWS;
         int xdelta = Window.getWidth2()/NUM_COLUMNS;
         
-        System.out.println(Window.getWidth2() + " " + Window.getHeight2());
+//        System.out.println(Window.getWidth2() + " " + Window.getHeight2());
         
         if(bgSound.donePlaying)
         bgSound = new sound("loadout_ambient.wav");
     }
     
-    public static void ExplosionSound(){
-        MisExplo = new sound("artillery_strike_far_01.wav"); 
+    public static void Click(){
+        Shrink--;
+        if(Shrink == 0)
+        {
+            Board.BoardSwitch();
+            Player.SwitchTurn();
+            
+            Shrink = 3;
+            Turns++;
+            if(Turns == 2){
+                Levels.SwitchLevel();
+            }
+        }
     }
     
-    public static void BoardSwitch(){
+    public static boolean TurnsCheck(){
+        if(Turns >= 2){
+            
+            return true;
+    }
         
+        return false;
+    }
+    
+    
+    
+    public static void BoardSwitch(){
+// 0 1 2 3        
         
         if(Player.GetCurrentPlayer() == Player.getPlayer1())
-            BoardSel = 1;
+            BoardSel = 2;
         else if(Player.GetCurrentPlayer() == Player.getPlayer2())
+            BoardSel = 3;
+ 
+    }
+    
+    public static void BoardSwitchSpace(){
+        if(BoardSel == 2)
+            BoardSel = 1;
+        else if(BoardSel == 3)
             BoardSel = 0;
-        
-        
-        
-        
     }
     
     
@@ -69,6 +101,176 @@ public class Board {
         int ydelta = Window.getHeight2()/NUM_ROWS;
         int xdelta = Window.getWidth2()/NUM_COLUMNS;
  
+        if(BoardSel == 2 || BoardSel == 3){
+//fill background
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, Window.xsize, Window.ysize);
+
+        int x[] = {Window.getX(0), Window.getX(Window.getWidth2()), Window.getX(Window.getWidth2()), Window.getX(0), Window.getX(0)};
+        int y[] = {Window.getY(0), Window.getY(0), Window.getY(Window.getHeight2()), Window.getY(Window.getHeight2()), Window.getY(0)};
+//fill border
+        g.setColor(Color.black);
+        g.fillPolygon(x, y, 4);
+//g.drawImage(WaterBgGif2,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),thisObj); 
+
+// draw border
+        g.setColor(Color.black);
+        g.drawPolyline(x, y, 5);
+//draw text
+if(Levels.GetCurrentLevel() == 1){
+    if(BoardSel == 2){
+        g.setColor(Color.red); 
+        g.setFont(new Font("Impact", Font.BOLD,50));
+        g.drawString("Player 2's Turn", Window.getX((Window.WINDOW_WIDTH/2)-190), 225);
+        
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Let Player 1 Turn Around", 110, 325);
+        g.setColor(Color.blue);
+        g.drawString("Player 1", 172, 325);
+        
+        g.setColor(Color.white);
+        if(Timer.retTC() % 16 > 8){
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Press Space to Continue", 110, 425);
+        }
+        else{
+        g.setFont(new Font("Impact", Font.BOLD,35));
+        g.drawString("Press Space to Continue", 140, 425);
+        }
+    }
+    else
+    {
+        g.setColor(Color.blue);    
+        g.setFont(new Font("Impact", Font.BOLD,50));
+        g.drawString("Player 1's Turn", Window.getX((Window.WINDOW_WIDTH/2)-190), 225);
+        
+        
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Let Player 2 Turn Around", 110, 325);
+        g.setColor(Color.red);
+        g.drawString("Player 2", 172, 325);
+        
+        g.setColor(Color.white);
+        if(Timer.retTC() % 16 < 8){
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Press Space to Continue", 110, 425);
+        }
+        else{
+        g.setFont(new Font("Impact", Font.BOLD,35));
+        g.drawString("Press Space to Continue", 140, 425);
+        }
+
+    }
+}
+else if(Levels.GetCurrentLevel() == 2){
+    if(BoardSel == 2){
+        g.setColor(Color.red); 
+        g.setFont(new Font("Impact", Font.BOLD,50));
+        g.drawString("Player 2's Turn", Window.getX((Window.WINDOW_WIDTH/2)-190), 225);
+        
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Let Player 1 Turn Around", 110, 325);
+        g.setColor(Color.blue);
+        g.drawString("Player 1", 172, 325);
+        
+        g.setColor(Color.white);
+        if(Timer.retTC() % 16 > 8){
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Press Space to Continue", 110, 425);
+        }
+        else{
+        g.setFont(new Font("Impact", Font.BOLD,35));
+        g.drawString("Press Space to Continue", 140, 425);
+        }
+    }
+    else
+    {
+        g.setColor(Color.blue);    
+        g.setFont(new Font("Impact", Font.BOLD,50));
+        g.drawString("Player 1's Turn", Window.getX((Window.WINDOW_WIDTH/2)-190), 225);
+        
+        
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Let Player 2 Turn Around", 110, 325);
+        g.setColor(Color.red);
+        g.drawString("Player 2", 172, 325);
+        
+        g.setColor(Color.white);
+        if(Timer.retTC() % 16 < 8){
+        g.setFont(new Font("Impact", Font.BOLD,40));
+        g.drawString("Press Space to Continue", 110, 425);
+        }
+        else{
+        g.setFont(new Font("Impact", Font.BOLD,35));
+        g.drawString("Press Space to Continue", 140, 425);
+        }
+
+    }
+}
+ 
+    return;
+    }
+//////////////////////write under here    
+    if(Levels.GetCurrentLevel() == 1 && BoardSel == 0){
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Ships Left to Place: " + Shrink, 45, 60);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 1 place your ships", 385, 60);
+
+        g.setColor(Color.blue);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 1 ", 385, 60);
+    }
+    else if(Levels.GetCurrentLevel() == 1 && BoardSel == 1){
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Ships Left to Place: " + Shrink, 45, 60);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 2 place your ships", 385, 60);
+
+        g.setColor(Color.red);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 2 ", 385, 60);
+    }
+    
+    if(Levels.GetCurrentLevel() == 2 && BoardSel == 0){
+//        g.setColor(Color.white);
+//        g.setFont(new Font("Impact", Font.BOLD,20));
+//        g.drawString("Ships Left to Place: " + Shrink, 45, 60);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 1 Seek and Destroy", 215, 60);
+
+        g.setColor(Color.blue);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 1 ", 215, 60);
+    }
+    else if(Levels.GetCurrentLevel() == 2 && BoardSel == 1){
+//        g.setColor(Color.white);
+//        g.setFont(new Font("Impact", Font.BOLD,20));
+//        g.drawString("Ships Left to Place: " + Shrink, 45, 60);
+
+        g.setColor(Color.white);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 2 Seek and Destroy", 215, 60);
+
+        g.setColor(Color.red);
+        g.setFont(new Font("Impact", Font.BOLD,20));
+        g.drawString("Player 2 ", 215, 60);
+    }
+        
         g.setColor(Color.black);
         for (int zi = 1;zi<NUM_ROWS;zi++)
         {
@@ -98,7 +300,7 @@ public class Board {
         }
     
     }
-    
+////////////////////////////////////////////////////////////////////////////////////    
         public static boolean MisCollision(int xpixel, int ypixel){
             int ydelta = Window.getHeight2()/NUM_ROWS;
             int xdelta = Window.getWidth2()/NUM_COLUMNS;    
@@ -107,26 +309,57 @@ public class Board {
             int zrow = (ypixel-Window.getY(0))/ydelta;    
             System.out.println(zrow + " " + zcol);
             
-            if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0){
-            
-            if(board[zrow][zcol][BoardSel] != null)
-                return true;
+            if(zrow < NUM_ROWS && zrow > -1 && zcol < NUM_COLUMNS && zcol > -1) 
+                if(board[zrow][zcol][BoardSel] != null)
+                    return true;
            
-            }
+            
             return false;
         }
         
-        public static void RemovePiecePixel (int xpixel, int ypixel) {
+        public static void RemovePiecePixel_HIT (int xpixel, int ypixel) {
 
         int ydelta = Window.getHeight2()/NUM_ROWS;
         int xdelta = Window.getWidth2()/NUM_COLUMNS;    
             
         int zcol = (xpixel-Window.getX(0))/xdelta;
         int zrow = (ypixel-Window.getY(0))/ydelta;    
-             
+        
+        if(BoardSel == 2 || BoardSel == 3)
+                return;
+        
+        if(board[zrow][zcol][BoardSel] != null && board[zrow][zcol][BoardSel].getColor() != Color.BLUE){
 
-        board[zrow][zcol][BoardSel] = null;
+        
         board[zrow][zcol][BoardSel] = new Piece(Color.GRAY);
+//        if(board[zrow][zcol][BoardSel].getColor() != Color.GRAY)
+//            Board.Click();
+        
+        }
+
+        
+        
+//        Board.BoardSwitch();
+//        Player.SwitchTurn(); 
+        
+        
+        }
+        
+        public static void RemovePiecePixel_MISS (int xpixel, int ypixel) {
+
+        int ydelta = Window.getHeight2()/NUM_ROWS;
+        int xdelta = Window.getWidth2()/NUM_COLUMNS;    
+            
+        int zcol = (xpixel-Window.getX(0))/xdelta;
+        int zrow = (ypixel-Window.getY(0))/ydelta;    
+        
+        if(BoardSel == 2 || BoardSel == 3)
+                return;
+
+
+        
+        if(board[zrow][zcol][BoardSel] == null)
+            board[zrow][zcol][BoardSel] = new Piece(Color.BLUE);
         
         
         Board.BoardSwitch();
@@ -134,6 +367,85 @@ public class Board {
         
         
         }
+        
+        public static void ExplosionSound_HIT(int xpixel, int ypixel){
+        
+        int ydelta = Window.getHeight2()/NUM_ROWS;
+        int xdelta = Window.getWidth2()/NUM_COLUMNS;
+        
+        int zcol = (xpixel-Window.getX(0))/xdelta;
+        int zrow = (ypixel-Window.getY(0))/ydelta;  
+        
+        if(BoardSel == 2 || BoardSel == 3)
+            return;   
+        
+        int RanVal = (int)(Math.random()*4);
+        if(board[zrow][zcol][BoardSel].getColor() == Color.RED || board[zrow][zcol][BoardSel].getColor() == Color.BLACK){
+            if(RanVal == 0)
+            MisExplo = new sound("artillery_strike_far_01.wav"); 
+            else if(RanVal == 1)
+            MisExplo = new sound("artillery_strike_far_02.wav"); 
+            else if(RanVal == 2)
+            MisExplo = new sound("artillery_strike_far_03.wav"); 
+            else
+            MisExplo = new sound("artillery_strike_far_04.wav"); 
+        }
+//        System.out.println(RanVal);
+    }
+    
+    public static void ExplosionSound_MISS(int xpixel, int ypixel){
+        
+        int ydelta = Window.getHeight2()/NUM_ROWS;
+        int xdelta = Window.getWidth2()/NUM_COLUMNS;
+        
+        int zcol = (xpixel-Window.getX(0))/xdelta;
+        int zrow = (ypixel-Window.getY(0))/ydelta;  
+        
+        if(BoardSel == 2 || BoardSel == 3)
+            return;
+        
+        if(board[zrow][zcol][BoardSel] != null)
+            return;
+        
+        int RanVal = (int)(Math.random()*4);
+            if(RanVal == 0)
+            MisExplo = new sound("artillery_strike_far_water_01.wav"); 
+            else if(RanVal == 1)
+            MisExplo = new sound("artillery_strike_far_water_02.wav"); 
+            else if(RanVal == 2)
+            MisExplo = new sound("artillery_strike_far_water_03.wav"); 
+            else
+            MisExplo = new sound("artillery_strike_far_water_04.wav"); 
+        
+        System.out.println(RanVal);
+    }
+    
+        public static void AddPiecePixel(int xpixel,int ypixel) {
+        
+        int ydelta = Window.getHeight2()/NUM_ROWS;
+        int xdelta = Window.getWidth2()/NUM_COLUMNS;
+
+        int zcol = (xpixel-Window.getX(0))/xdelta;
+        int zrow = (ypixel-Window.getY(0))/ydelta;
+        
+        
+        if(zrow < NUM_ROWS && zrow > -1 && zcol < NUM_COLUMNS && zcol > -1) {
+            if(BoardSel == 2 || BoardSel == 3)
+                return;
+          
+        if(board[zrow][zcol][BoardSel] != null)
+            return;
+        
+        board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+
+        Board.Click();
+//        Board.BoardSwitch();
+//        Player.SwitchTurn();
+                
+        }
+
+    }     
+/////////////////////////////////////////////////////////////////////////////////       
         public static int xdelta(){
             int xdelta = Window.getWidth2()/NUM_COLUMNS;
             return(xdelta);
@@ -143,28 +455,11 @@ public class Board {
             int ydelta = Window.getHeight2()/NUM_ROWS;
             return(ydelta);
         }
-        public static void AddPiecePixel(int xpixel,int ypixel) {
         
-        int ydelta = Window.getHeight2()/NUM_ROWS;
-        int xdelta = Window.getWidth2()/NUM_COLUMNS;
 
-        int zcol = (xpixel-Window.getX(0))/xdelta;
-        int zrow = (ypixel-Window.getY(0))/ydelta;
-
-        if((xpixel-Window.getX(0)) > 0 && zcol < NUM_ROWS && (ypixel-Window.getY(0)) > 0){
-
-                
-                board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
-
-                Board.BoardSwitch();
-                Player.SwitchTurn();
-                
-        }
-
-    } 
     
     public static void PlayerPaint(Graphics2D g, Battleship thisObj){
-    if(Player.GetCurrentPlayer() == Player.getPlayer1()){        
+if(Player.GetCurrentPlayer() == Player.getPlayer1()){        
 //fill background
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Window.xsize, Window.ysize);
@@ -174,7 +469,9 @@ public class Board {
 //fill border
 //        g.setColor(Color.GRAY);
 //        g.fillPolygon(x, y, 4);
-        g.drawImage(WaterBgGif1,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),thisObj); 
+//        g.drawImage(WaterBgGif1,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),thisObj); 
+        
+        g.drawImage(WaterBgGif2,Window.getX(0),Window.getY(0),Window.getWidth2(),Window.getHeight2(),thisObj);
 // draw border
         g.setColor(Color.black);
         g.drawPolyline(x, y, 5);
@@ -197,8 +494,10 @@ else if(Player.GetCurrentPlayer() == Player.getPlayer2())
         g.drawPolyline(x, y, 5);
             
 }    
+
+
     }    
-        
+////////////////////////////////////////////////////        
     public static void Init(){
         WaterBgGif1 = Toolkit.getDefaultToolkit().getImage("./WaterBgGif.gif");
         WaterBgGif2 = Toolkit.getDefaultToolkit().getImage("./OceanBG.gif");
@@ -207,6 +506,14 @@ else if(Player.GetCurrentPlayer() == Player.getPlayer2())
         
         bgSound = new sound("loadout_ambient.wav");
     }
+    
+    public static int getNUM_COLUMNS(){
+        return(NUM_COLUMNS);
+    }
+    public static int getNUM_ROWS(){
+        return(NUM_ROWS);
+    }
+    
 ////////////////////////////////////////////////////    
     public static class sound implements Runnable {
     Thread myThread;
