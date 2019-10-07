@@ -34,6 +34,11 @@ public class Piece {
     private static Image sub_redV;
     private static Image carrier_blueV;
     private static Image carrier_redV;
+    private static Image sub_redRight;
+    private static Image sub_redDown;
+    private static Image sub_blueRight;    
+    private static Image sub_blueDown;    
+
     
     private static Image X;
     
@@ -47,81 +52,108 @@ public class Piece {
     {
         return (color);
     }
-    
 
     public void draw(Graphics2D g,int row,int column, int xdelta,int ydelta, Battleship thisObj) {
         g.setColor(color); 
-//        g.fillOval( Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
-    if (!shipRotation)
-    {
-        if(color == Player.getPlayer1().getColor()) //blue
+        if (!shipRotation)  ///Horizontal
         {
-            if (shipType == 6)
-                g.drawImage(carrier_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 5)
-                g.drawImage(battleship_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 4)
-                g.drawImage(cruiser_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 3)
-                g.drawImage(sub_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 2)
-                g.drawImage(destroyer_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+            if(color == Player.getPlayer1().getColor()) //blue
+            {
+                if (shipType == 6)
+                    g.drawImage(carrier_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 5)
+                    g.drawImage(battleship_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 4)
+                    g.drawImage(cruiser_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 3)
+                    g.drawImage(sub_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 2)
+                    g.drawImage(destroyer_blue,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+            }
+            else if(color == Player.getPlayer2().getColor())    //red
+            {
+                if (shipType == 6)
+                    g.drawImage(carrier_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 5)
+                    g.drawImage(battleship_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 4)
+                    g.drawImage(cruiser_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 3)
+                    g.drawImage(sub_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+                else if (shipType == 2)
+                    g.drawImage(destroyer_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+            }
+            else if (color == Color.gray)  //draw X
+                g.drawImage(X,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);
+            else if (color == Color.white){
+                g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
+            }
+            else if (color == Color.green){ //scout ship
+                if (Scout.scoutDirection() == 0){ //up W
+                g.drawImage(sub_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+                else if (Scout.scoutDirection() == 1){ //left A
+                    g.drawImage(sub_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+                else if (Scout.scoutDirection() == 2){ //down S
+                    g.drawImage(sub_redDown,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+                else if (Scout.scoutDirection() == 3){ //right D
+                    g.drawImage(sub_redRight,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+            }
         }
-        else if(color == Player.getPlayer2().getColor())    //red
+        else    //vertical
         {
-            if (shipType == 6)
-                g.drawImage(carrier_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 5)
-                g.drawImage(battleship_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 4)
-                g.drawImage(cruiser_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 3)
-                g.drawImage(sub_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
-            else if (shipType == 2)
-                g.drawImage(destroyer_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta*shipType,ydelta,thisObj);
+            if(color == Player.getPlayer1().getColor()) //blue
+            {
+                if (shipType == 6)
+                    g.drawImage(carrier_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 5)
+                    g.drawImage(battleship_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 4)
+                    g.drawImage(cruiser_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 3)
+                    g.drawImage(sub_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 2)
+                    g.drawImage(destroyer_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+            }
+            else if(color == Player.getPlayer2().getColor())    //red
+            {
+                if (shipType == 6)
+                    g.drawImage(carrier_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 5)
+                    g.drawImage(battleship_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 4)
+                    g.drawImage(cruiser_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 3)
+                    g.drawImage(sub_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+                else if (shipType == 2)
+                    g.drawImage(destroyer_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
+            }
+            else if (color == Color.gray)  //draw X
+                g.drawImage(X,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);
+            else if (color == Color.white)
+            {
+                g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
+            }
+            else if (color == Color.green)
+            {
+                if (Scout.scoutDirection() == 0){ //up W
+                g.drawImage(sub_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+                else if (Scout.scoutDirection() == 1){ //left A
+                    g.drawImage(sub_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+                else if (Scout.scoutDirection() == 2){ //down S
+                    g.drawImage(sub_redDown,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+                else if (Scout.scoutDirection() == 3){ //right D
+                    g.drawImage(sub_redRight,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                }
+            }
+
         }
-        else if (color == Color.gray)  //draw X
-            g.drawImage(X,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);
-        else if (color == Color.white)
-        {
-            g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
-        }
-    }
-    else
-    {
-        if(color == Player.getPlayer1().getColor()) //blue
-        {
-            if (shipType == 6)
-                g.drawImage(carrier_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 5)
-                g.drawImage(battleship_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 4)
-                g.drawImage(cruiser_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 3)
-                g.drawImage(sub_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 2)
-                g.drawImage(destroyer_blueV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-        }
-        else if(color == Player.getPlayer2().getColor())    //red
-        {
-            if (shipType == 6)
-                g.drawImage(carrier_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 5)
-                g.drawImage(battleship_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 4)
-                g.drawImage(cruiser_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 3)
-                g.drawImage(sub_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-            else if (shipType == 2)
-                g.drawImage(destroyer_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta*shipType,thisObj);
-        }
-        else if (color == Color.gray)  //draw X
-            g.drawImage(X,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);
-        else if (color == Color.white)
-        {
-            g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
-        }
-    }
         
     }
     
@@ -162,6 +194,11 @@ public class Piece {
         sub_blueV = Toolkit.getDefaultToolkit().getImage("./sub_blueV.png");  
         sub_redV = Toolkit.getDefaultToolkit().getImage("./sub_redV.png");    
         
+        sub_blueRight = Toolkit.getDefaultToolkit().getImage("./sub_blueRight.png");  
+        sub_redRight = Toolkit.getDefaultToolkit().getImage("./sub_redRight.png");    
+        
+        sub_blueDown = Toolkit.getDefaultToolkit().getImage("./sub_blueDown.png");  
+        sub_redDown = Toolkit.getDefaultToolkit().getImage("./sub_redDown.png");    
         
         X = Toolkit.getDefaultToolkit().getImage("./XPixel.png");
     }
