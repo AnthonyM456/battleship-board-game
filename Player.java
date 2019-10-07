@@ -6,8 +6,7 @@ import java.awt.Color;
 public class Player {
     private static Player currentTurn;
     private static Player players[] = new Player[3];
-    private Color color;    
-    
+    private Color color;
     
     public static void Reset()
     {
@@ -43,11 +42,12 @@ public class Player {
     }
     public static void SwitchTurn()
     {
-                if(currentTurn == players[0])
-                    currentTurn = players[1];
-                else if(currentTurn == players[1])
-                    currentTurn = players[0];
+        Scout.scoutCount();
 
+        if(currentTurn == players[0])
+            currentTurn = players[1];
+        else if(currentTurn == players[1])
+            currentTurn = players[0];        
     }    
     Player(Color _color)
     {
