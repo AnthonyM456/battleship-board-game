@@ -15,13 +15,15 @@ public class Board {
     private final static int NUM_COLUMNS = 12;      
     private static Piece board[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][4];
     private static Piece hover[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][4];
-    private static Piece ship[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][4];
+    public static Piece ship[][][] = new Piece[NUM_ROWS][NUM_COLUMNS][4];
     private static int BoardSel;
     private static int shipSize = 6;
     private static boolean rotate;
     private static Image WaterBgGif1;
     private static Image WaterBgGif2;
     private static boolean validPlacement;
+    private static int mouseGetX;
+    private static int mouseGetY;
     
     
     private static sound bgSound;
@@ -112,6 +114,7 @@ public class Board {
         else if(BoardSel == 3)
             BoardSel = 0;
     }
+
     
     
     public static void Draw(Graphics2D g, Battleship thisObj) {
@@ -220,7 +223,7 @@ public class Board {
             
             int zcol = (xpixel-Window.getX(0))/xdelta;
             int zrow = (ypixel-Window.getY(0))/ydelta;    
-            System.out.println(zrow + " " + zcol);
+//            System.out.println(zrow + " " + zcol);
             
             if(zrow < NUM_ROWS && zrow > -1 && zcol < NUM_COLUMNS && zcol > -1) 
                 if(ship[zrow][zcol][BoardSel] != null)
@@ -232,139 +235,137 @@ public class Board {
         
         public static void RemovePiecePixel (int xpixel, int ypixel) {
 
-        int ydelta = Window.getHeight2()/NUM_ROWS;
-        int xdelta = Window.getWidth2()/NUM_COLUMNS;    
-            
-        int zcol = (xpixel-Window.getX(0))/xdelta;
-        int zrow = (ypixel-Window.getY(0))/ydelta;    
-         
-        if(ship[zrow][zcol][BoardSel] != null){
+            int ydelta = Window.getHeight2()/NUM_ROWS;
+            int xdelta = Window.getWidth2()/NUM_COLUMNS;    
+
+            int zcol = (xpixel-Window.getX(0))/xdelta;
+            int zrow = (ypixel-Window.getY(0))/ydelta;    
+
+            if(ship[zrow][zcol][BoardSel] != null){
 
 
-        ship[zrow][zcol][BoardSel] = new Piece(Color.GRAY);
-        }
-        
-        
-//        Board.BoardSwitch();
-//        Player.SwitchTurn(); 
-        
-        
+            ship[zrow][zcol][BoardSel] = new Piece(Color.GRAY);
+            }
+
+
+    //        Board.BoardSwitch();
+    //        Player.SwitchTurn(); 
+
+
         }
         public static void AddPiecePixel(int xpixel,int ypixel) {
         
-        int ydelta = Window.getHeight2()/NUM_ROWS;
-        int xdelta = Window.getWidth2()/NUM_COLUMNS;
+            int ydelta = Window.getHeight2()/NUM_ROWS;
+            int xdelta = Window.getWidth2()/NUM_COLUMNS;
 
-        int zcol = (xpixel-Window.getX(0))/xdelta;
-        int zrow = (ypixel-Window.getY(0))/ydelta;
+            int zcol = (xpixel-Window.getX(0))/xdelta;
+            int zrow = (ypixel-Window.getY(0))/ydelta;
 
-        if(zrow < NUM_ROWS && zrow > -1 && zcol < NUM_COLUMNS && zcol > -1) {
-            if(BoardSel == 2 || BoardSel == 3)
-                return;
-        if (!rotate) {
-            for (int i=0;i<shipSize;i++){
-                if (zcol+shipSize > NUM_COLUMNS){
-                    if (zcol+i < NUM_COLUMNS && ship[zrow][zcol+i][BoardSel] != null) 
-                    {
+            if(zrow < NUM_ROWS && zrow > -1 && zcol < NUM_COLUMNS && zcol > -1) {
+                if(BoardSel == 2 || BoardSel == 3)
+                    return;
+            if (!rotate) {
+                for (int i=0;i<shipSize;i++){
+                    if (zcol+shipSize > NUM_COLUMNS){
+                        if (zcol+i < NUM_COLUMNS && ship[zrow][zcol+i][BoardSel] != null){
+                            validPlacement = false;
+                            return;
+                        }
+                        else if (ship[zrow][(NUM_COLUMNS-shipSize)+i][BoardSel] != null){
+//                            System.out.println("sickman");
+                            validPlacement=false;
+                            return;
+                        }
+                        else 
+                        {
+//                            System.out.println("noo whyy");
+                            validPlacement = true;
+                        }
+                    }
+                    else if (ship[zrow][zcol+i][BoardSel] != null){
+//                        System.out.println("not aight");
                         validPlacement = false;
                         return;
                     }
-                    else if (ship[zrow][(NUM_COLUMNS-shipSize)+i][BoardSel] != null)
-                    {
-                        System.out.println("sickman");
-                        validPlacement=false;
-                        return;
-                    }
-                    else 
-                    {
-                        System.out.println("noo whyy");
+                    else if (ship[zrow][zcol+i][BoardSel] == null){
                         validPlacement = true;
+                        System.out.println(zcol+shipSize);
                     }
                 }
-                else if (ship[zrow][zcol+i][BoardSel] != null){
-                    System.out.println("not aight");
-                    validPlacement = false;
-                    return;
-                }
-                else if (ship[zrow][zcol+i][BoardSel] == null){
-                    validPlacement = true;
-                    System.out.println(zcol+shipSize);
+                if (validPlacement){
+//                    System.out.println("valid");
+                    if (zcol+shipSize > NUM_COLUMNS){
+                       board[zrow][NUM_COLUMNS-shipSize][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+                        for (int i=0;i<shipSize;i++){
+                            ship[zrow][(NUM_COLUMNS-shipSize)+i][BoardSel] = new Piece(Color.white);
+                        }
+                    }
+                    else {
+                        for (int i=0;i<shipSize;i++){
+                        ship[zrow][zcol+i][BoardSel] = new Piece(Color.white);
+                        board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+                    }
+                    }
+                    shipSize--;
                 }
             }
-            if (validPlacement){
-                System.out.println("yo mama");
-                if (zcol+shipSize > NUM_COLUMNS){
-                   board[zrow][NUM_COLUMNS-shipSize][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
-                    for (int i=0;i<shipSize;i++){
-                        ship[zrow][(NUM_COLUMNS-shipSize)+i][BoardSel] = new Piece(Color.white);
+            else {
+                for (int i=0;i<shipSize;i++){
+                    if (zrow+shipSize > NUM_ROWS){
+                        if (zrow+i < NUM_ROWS && ship[zrow+i][zcol][BoardSel] != null)
+                        {
+                            validPlacement = false;
+                            return;
+                        }
+                        else if (ship[(NUM_ROWS-shipSize)+i][zcol][BoardSel] != null)
+                        {
+                            System.out.println("sickman");
+                            validPlacement=false;
+                            return;
+                        }
+                        else
+                            validPlacement = true;
+                    }
+                    else if (ship[zrow+i][zcol][BoardSel] != null){
+                        System.out.println("not aight");
+                        validPlacement = false;
+                        return;
+                    }
+                    else if (ship[zrow+i][zcol][BoardSel] == null){
+                        validPlacement = true;
+                        System.out.println(zcol+shipSize);
                     }
                 }
-                else {
-                    for (int i=0;i<shipSize;i++){
-                    ship[zrow][zcol+i][BoardSel] = new Piece(Color.white);
-                    board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
-                }
+                if (validPlacement){
+//                    System.out.println("yo mama");
+                    if (zrow+shipSize > NUM_ROWS){
+                       board[NUM_ROWS-shipSize][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+                        for (int i=0;i<shipSize;i++){
+                            ship[(NUM_ROWS-shipSize)+i][zcol][BoardSel] = new Piece(Color.white);
+                        }
+                    }
+                    else {
+                        for (int i=0;i<shipSize;i++){
+                        ship[zrow+i][zcol][BoardSel] = new Piece(Color.white);
+                        board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
+                        }
+                    }
                 }
                 shipSize--;
             }
-        }
-        else {
-            for (int i=0;i<shipSize;i++){
-                if (zrow+shipSize > NUM_ROWS){
-                    if (zrow+i < NUM_ROWS && ship[zrow+i][zcol][BoardSel] != null)
-                    {
-                        validPlacement = false;
-                        return;
-                    }
-                    else if (ship[(NUM_ROWS-shipSize)+i][zcol][BoardSel] != null)
-                    {
-                        System.out.println("sickman");
-                        validPlacement=false;
-                        return;
-                    }
-                    else
-                        validPlacement = true;
-                }
-                else if (ship[zrow+i][zcol][BoardSel] != null){
-                    System.out.println("not aight");
-                    validPlacement = false;
-                    return;
-                }
-                else if (ship[zrow+i][zcol][BoardSel] == null){
-                    validPlacement = true;
-                    System.out.println(zcol+shipSize);
-                }
+
+    //            System.out.println("not aight");
+
+            if (shipSize < 2){
+                Player.SwitchTurn();
+                shipSize = 6;
             }
-            if (validPlacement){
-                System.out.println("yo mama");
-                if (zrow+shipSize > NUM_ROWS){
-                   board[NUM_ROWS-shipSize][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
-                    for (int i=0;i<shipSize;i++){
-                        ship[(NUM_ROWS-shipSize)+i][zcol][BoardSel] = new Piece(Color.white);
-                    }
-                }
-                else {
-                    for (int i=0;i<shipSize;i++){
-                    ship[zrow+i][zcol][BoardSel] = new Piece(Color.white);
-                    board[zrow][zcol][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
-                    }
-                }
+
+
+
+    //        Board.BoardSwitch();
+    //        Player.SwitchTurn();           
             }
-            shipSize--;
-        }
-            
-//            System.out.println("not aight");
-        
-        if (shipSize == 1){
-            Player.SwitchTurn();
-            shipSize = 6;
-        }
-
-
-
-//        Board.BoardSwitch();
-//        Player.SwitchTurn();           
-        }
     }
         public static int xdelta(){
             int xdelta = Window.getWidth2()/NUM_COLUMNS;
@@ -375,6 +376,9 @@ public class Board {
             int ydelta = Window.getHeight2()/NUM_ROWS;
             return(ydelta);
         }
+        public static int BoardSel(){
+            return(BoardSel);
+        }
         
 /////////////////////////////////////////////////////////////////////        
     public static void Hover(int xpixel,int ypixel){
@@ -383,6 +387,8 @@ public class Board {
 
         int zcol = (xpixel-Window.getX(0))/xdelta;
         int zrow = (ypixel-Window.getY(0))/ydelta;
+        mouseGetX = xpixel;
+        mouseGetY = ypixel;
         
         if(zrow < NUM_ROWS && zrow > -1 && zcol < NUM_COLUMNS && zcol > -1) {
             if(BoardSel == 2 || BoardSel == 3)
@@ -448,6 +454,12 @@ public class Board {
     public static boolean getRotate(){
         return(rotate);
     } 
+    public static int mouseGetX(){
+        return(mouseGetX);
+    }
+    public static int mouseGetY(){
+        return(mouseGetY);
+    }
     
 ////////////////////////////////////////////////////////////////////////////////////////////////
     public static void PlayerPaint(Graphics2D g, Battleship thisObj){
