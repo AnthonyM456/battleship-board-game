@@ -49,7 +49,10 @@ public class Battleship extends JFrame implements Runnable {
                         else
                         {
 //                            Board.ExplosionSound_MISS(e.getX(), e.getY());
-                               Board.AddPiecePixel(e.getX(),e.getY()); 
+                            if (Scout.getScoutActive())
+                               Scout.scoutAdd(e.getX(),e.getY());
+                            else
+                                Board.AddPiecePixel(e.getX(),e.getY()); 
 
                         }
 
@@ -72,10 +75,18 @@ public class Battleship extends JFrame implements Runnable {
     });
 
     addMouseMotionListener(new MouseMotionAdapter() {
-      public void mouseMoved(MouseEvent e) {
-          if (Menu.gameStart()){
-          Board.Move();
-          Board.Hover(e.getX(), e.getY());
+        public void mouseMoved(MouseEvent e) {
+            if (Menu.gameStart()){
+                if (Scout.getScoutActive())
+                {
+                    Scout.Move();
+                    Scout.scoutHover(e.getX(), e.getY()); 
+                }
+                else
+                {
+                    Board.Move();
+                    Board.Hover(e.getX(), e.getY()); 
+                }
           }
 
         repaint();
@@ -86,16 +97,35 @@ public class Battleship extends JFrame implements Runnable {
 
             public void keyPressed(KeyEvent e) {
                 if (e.VK_UP == e.getKeyCode()) {
-                } else if (e.VK_DOWN == e.getKeyCode()) {
+                } else if (e.VK_DOWN == e.getKeyCode()){
                 } else if (e.VK_LEFT == e.getKeyCode()) {
                 } else if (e.VK_RIGHT == e.getKeyCode()) {
                 } else if (e.VK_ESCAPE == e.getKeyCode()) {
                     reset();
                 } else if (e.VK_SPACE == e.getKeyCode()) {
-                        Board.BoardSwitchSpace();
+                    Scout.scoutShoot();
+                    Board.BoardSwitchSpace();
                 } else if (e.VK_R == e.getKeyCode()) {
+                    Board.Move();
                     Board.rotateShip();
-                }
+                    Board.Hover(Board.mouseGetX(), Board.mouseGetY());
+                } else if (e.VK_W == e.getKeyCode()){
+                    Scout.scoutClear();
+                    Scout.scoutMove(1);
+                    Scout.changeScoutDirection(0);
+                } else if (e.VK_A == e.getKeyCode()){
+                    Scout.scoutClear();
+                    Scout.scoutMove(2);
+                    Scout.changeScoutDirection(1);
+                } else if (e.VK_S == e.getKeyCode()){
+                    Scout.scoutClear();
+                    Scout.scoutMove(3);
+                    Scout.changeScoutDirection(2);
+                } else if (e.VK_D == e.getKeyCode()){
+                    Scout.scoutClear();
+                    Scout.scoutMove(4);
+                    Scout.changeScoutDirection(3);
+                } 
                 repaint();
             }
         });
@@ -128,8 +158,10 @@ public class Battleship extends JFrame implements Runnable {
         return;
     }
         
-        Board.PlayerPaint(g, this);     
+        Board.PlayerPaint(g, this);    
+        Scout.Draw(g, this);
         Board.Draw(g, this);
+//        Scout.Draw(g, this);
         Menu.Draw(g, this);
         
         
