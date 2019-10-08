@@ -41,17 +41,17 @@ public class Menu {
             
             g.setColor(Color.WHITE);
             g.fillRect((4*xdelta)+(xdelta/2)+getX()-2,403+Window.getY(0)-2,3*xdelta+4,2*ydelta+4);
-            g.setColor(Color.BLUE);  // tutorial button
+            g.setColor(Color.RED);  // tutorial button
             g.fillRect((4*xdelta)+(xdelta/2)+getX(),403+Window.getY(0),3*xdelta,2*ydelta);
             
             g.setColor(Color.WHITE);    //start text
-            g.setFont(new Font("Arial",Font.BOLD,60));
-            g.drawString("START", 50+getX(),490+getY());     
+            g.setFont(new Font("High Tower Text",Font.BOLD,60));
+            g.drawString("START", 40+getX(),490+getY());     
             
             g.setColor(Color.WHITE);    //How to play text
-            g.setFont(new Font("Arial",Font.BOLD,50));
+            g.setFont(new Font("High Tower Text",Font.BOLD,45));
             g.drawString("HOW TO ", 370,460+getY());   
-            g.drawString("PLAY ", 370,515+getY());
+            g.drawString("PLAY ", 400,515+getY());
         }
         if (tutorial)          // if you clicked "how to play"
         {
@@ -60,11 +60,11 @@ public class Menu {
             g.setColor(Color.WHITE);
             g.fillRect((4*xdelta)+(xdelta/2)+getX()-2,403+Window.getY(0)-2,3*xdelta+4,2*ydelta+4);
             
-            g.setColor(Color.BLUE);  // tutorial button
+            g.setColor(Color.BLACK);  // tutorial button
             g.fillRect((4*xdelta)+(xdelta/2)+getX(),403+Window.getY(0),3*xdelta,2*ydelta);
             
             g.setColor(Color.WHITE);
-            g.setFont(new Font("Arial",Font.BOLD,50));
+            g.setFont(new Font("High Tower Text",Font.BOLD,45));
             g.drawString("RETURN", 370,460+getY());
             g.drawImage(ReturnTXT,590,465+getY(),-230,70,thisObj);
             
@@ -80,8 +80,8 @@ public class Menu {
             g.drawString("If you destroy a piece of a ship, your turn continues.", 20,220+getY());
             g.drawString("If you miss, the other player's turn begins.", 20,240+getY());
             g.drawString("SCOUT SHIP:", 20,280+getY());
-            g.drawString("After 2 TURNS (for each player), you get a SCOUT SHIP.", 20,300+getY());
-            g.drawString("The scout ship can only move 2 times, so place it wisely.", 20,320+getY());
+            g.drawString("After TWO TURNS (for each player), you get a SCOUT SHIP.", 20,300+getY());
+            g.drawString("The scout ship can only move 5 times, so place it wisely.", 20,320+getY());
             g.drawString("Move the scout ship with WASD.", 20,340+getY());
             g.drawString("Press SPACE to destroy the ship you are under.", 20,360+getY());
 
