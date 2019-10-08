@@ -40,11 +40,6 @@ public class Battleship extends JFrame implements Runnable {
                         if(Board.MisCollision(e.getX(), e.getY())){
                             Board.ExplosionSound_HIT(e.getX(), e.getY());
                             Board.RemovePiecePixel(e.getX(),e.getY());
-                            
-                             
-                            
-                        
-
                         }
                         else
                         {
@@ -53,7 +48,6 @@ public class Battleship extends JFrame implements Runnable {
                                Scout.scoutAdd(e.getX(),e.getY());
                             else
                                 Board.AddPiecePixel(e.getX(),e.getY()); 
-
                         }
 
                     }
@@ -189,6 +183,7 @@ public class Battleship extends JFrame implements Runnable {
         Board.Reset();
         Menu.Reset();
         Timer.Reset();
+        Scout.Reset();
     }
 /////////////////////////////////////////////////////////////////////////
     public void drawImage(Image image,int xpos,int ypos,double rot,double xscale,
