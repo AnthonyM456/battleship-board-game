@@ -67,6 +67,24 @@ public class Menu {
             g.setFont(new Font("Arial",Font.BOLD,50));
             g.drawString("RETURN", 370,460+getY());
             g.drawImage(ReturnTXT,590,465+getY(),-230,70,thisObj);
+            
+            g.setFont(new Font("High Tower Text",Font.PLAIN,20));
+            g.drawString("Place ship/ Destroy ship:  LEFT CLICK",20,getY());
+            g.drawString("Rotate ship:  R", 20,20+getY());
+            g.drawString("Scout Ship movement: WASD", 20,40+getY());
+            g.drawString("Scout Ship destroy:  SPACE", 20,60+getY());
+            g.drawString("Each player has 5 ships to place.", 20,100+getY());
+            g.drawString("After each player places all their ships, the battle begins.", 20,120+getY());
+            g.drawString("To play the game, you must guess where the other player's ships are,", 20,160+getY());
+            g.drawString("and destroy them by pressing LEFT CLICK. Destroy all ships to win!", 20,180+getY());
+            g.drawString("If you destroy a piece of a ship, your turn continues.", 20,220+getY());
+            g.drawString("If you miss, the other player's turn begins.", 20,240+getY());
+            g.drawString("SCOUT SHIP:", 20,280+getY());
+            g.drawString("After 2 TURNS (for each player), you get a SCOUT SHIP.", 20,300+getY());
+            g.drawString("The scout ship can only move 2 times, so place it wisely.", 20,320+getY());
+            g.drawString("Move the scout ship with WASD.", 20,340+getY());
+            g.drawString("Press SPACE to destroy the ship you are under.", 20,360+getY());
+
         }
 
     }
@@ -112,12 +130,12 @@ public class Menu {
         int zrow = (ypixel-Window.getY(0));
 //        System.out.println(zcol+  " " + zrow);
         if (zcol > 35 && zcol < 265 && zrow > 400 && zrow < 540){
-            System.out.println("butt"); 
+//            System.out.println("start"); 
             gameStart = true;
         }
         else if (zcol > 335 && zcol < 565 && zrow > 400 && zrow < 540 && !gameStart)
         {
-            System.out.println("cheeks");
+//            System.out.println("howtoplay");
             if (tutorial)
                 tutorial = false;
             else 
