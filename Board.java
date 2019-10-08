@@ -36,6 +36,10 @@ public class Board {
         for (int zrow=0;zrow<NUM_ROWS;zrow++)
             for (int zcol=0;zcol<NUM_COLUMNS;zcol++)
                 board[zrow][zcol][b] = null;
+    for(int b=0;b<2;b++)
+        for (int zrow=0;zrow<NUM_ROWS;zrow++)
+            for (int zcol=0;zcol<NUM_COLUMNS;zcol++)
+                ship[zrow][zcol][b] = null;
         
         BoardSel = 0;
 //        board[2][3][0] = new Piece(Color.red);
@@ -76,28 +80,7 @@ public class Board {
         }
 //        System.out.println(RanVal);
     }
-    
-//    public static void ExplosionSound_MISS(int xpixel, int ypixel){
-//        
-//        int ydelta = Window.getHeight2()/NUM_ROWS;
-//        int xdelta = Window.getWidth2()/NUM_COLUMNS;
-//        
-//        int zcol = (xpixel-Window.getX(0))/xdelta;
-//        int zrow = (ypixel-Window.getY(0))/ydelta;  
-//        
-//        int RanVal = (int)(Math.random()*4);
-//            if(RanVal == 0)
-//            MisExplo = new sound("artillery_strike_far_water_01.wav"); 
-//            else if(RanVal == 1)
-//            MisExplo = new sound("artillery_strike_far_water_02.wav"); 
-//            else if(RanVal == 2)
-//            MisExplo = new sound("artillery_strike_far_water_03.wav"); 
-//            else
-//            MisExplo = new sound("artillery_strike_far_water_04.wav"); 
-//        
-//        System.out.println(RanVal);
-//    }
-    
+
     public static void BoardSwitch(){
 // 0 1 2 3        
         
@@ -156,33 +139,24 @@ public class Board {
         g.drawString("Press Space to Continue", 115, 425);
 
     }
-        
-        
         return;
         }
-            
-            
         
         g.setColor(Color.black);
-        for (int zi = 1;zi<NUM_ROWS;zi++)
-        {
+        for (int zi = 1;zi<NUM_ROWS;zi++){
             g.drawLine(Window.getX(0),Window.getY(zi*ydelta),
                     Window.getX(Window.getWidth2()),Window.getY(zi*ydelta));
         }
         
-        for (int zi = 1;zi<NUM_COLUMNS;zi++)
-        {
+        for (int zi = 1;zi<NUM_COLUMNS;zi++) {
             g.drawLine(Window.getX(zi*xdelta),Window.getY(0),
                     Window.getX(zi*xdelta),Window.getY(Window.getHeight2()));
         }
 
 
-        for (int zrow=0;zrow<NUM_ROWS;zrow++)
-        {
-            for (int zcol=0;zcol<NUM_COLUMNS;zcol++)        
-            {
-                if (board[zrow][zcol][BoardSel] != null)
-                {
+        for (int zrow=0;zrow<NUM_ROWS;zrow++){
+            for (int zcol=0;zcol<NUM_COLUMNS;zcol++) {
+                if (board[zrow][zcol][BoardSel] != null){
                     board[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta, thisObj);
 //                    g.drawImage(battleship_blue,Window.getX(0)+xdelta*zcol, Window.getY(0)+ydelta*zrow,xdelta,ydelta,thisObj);   
                     
@@ -190,27 +164,18 @@ public class Board {
 //                    Player.SwitchTurn();
             }
         }
-        for (int zrow=0;zrow<NUM_ROWS;zrow++)
-        {
-            for (int zcol=0;zcol<NUM_COLUMNS;zcol++)        
-            {
-                if (hover[zrow][zcol][BoardSel] != null)
-                {
+        for (int zrow=0;zrow<NUM_ROWS;zrow++) {
+            for (int zcol=0;zcol<NUM_COLUMNS;zcol++) {
+                if (hover[zrow][zcol][BoardSel] != null){
                     hover[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta, thisObj);
-//                    g.drawImage(battleship_blue,Window.getX(0)+xdelta*zcol, Window.getY(0)+ydelta*zrow,xdelta,ydelta,thisObj);   
-                    
                 }
             }
         }
-        for (int zrow=0;zrow<NUM_ROWS;zrow++)
-        {
-            for (int zcol=0;zcol<NUM_COLUMNS;zcol++)        
-            {
-                if (ship[zrow][zcol][BoardSel] != null)
-                {
+        for (int zrow=0;zrow<NUM_ROWS;zrow++)  {
+            for (int zcol=0;zcol<NUM_COLUMNS;zcol++)       {
+                if (ship[zrow][zcol][BoardSel] != null)        {
                     ship[zrow][zcol][BoardSel].draw(g, zrow, zcol, xdelta, ydelta, thisObj);
-//                    g.drawImage(battleship_blue,Window.getX(0)+xdelta*zcol, Window.getY(0)+ydelta*zrow,xdelta,ydelta,thisObj);   
-                    
+
                 }
             }
         }
@@ -247,11 +212,6 @@ public class Board {
             ship[zrow][zcol][BoardSel] = new Piece(Color.GRAY);
             }
 
-
-    //        Board.BoardSwitch();
-    //        Player.SwitchTurn(); 
-
-
         }
         public static void AddPiecePixel(int xpixel,int ypixel) {
         
@@ -278,7 +238,6 @@ public class Board {
                         }
                         else 
                         {
-//                            System.out.println("noo whyy");
                             validPlacement = true;
                         }
                     }
@@ -293,7 +252,6 @@ public class Board {
                     }
                 }
                 if (validPlacement){
-//                    System.out.println("valid");
                     if (zcol+shipSize > NUM_COLUMNS){
                        board[zrow][NUM_COLUMNS-shipSize][BoardSel] = new Piece(Player.GetCurrentPlayer().getColor());
                         for (int i=0;i<shipSize;i++){
@@ -354,17 +312,10 @@ public class Board {
                 shipSize--;
             }
 
-    //            System.out.println("not aight");
-
-            if (shipSize < 2){
+            if (shipSize < 2){      //after placing ships, switch turns
                 Player.SwitchTurn();
                 shipSize = 6;
             }
-
-
-
-    //        Board.BoardSwitch();
-    //        Player.SwitchTurn();           
             }
     }
         public static int xdelta(){
@@ -411,25 +362,7 @@ public class Board {
             
         }        
     }
-//    public static void Click(int xpixel, int ypixel){
-//        int ydelta = Window.getHeight2()/NUM_ROWS;
-//        int xdelta = Window.getWidth2()/NUM_COLUMNS;
-//
-//        int zcol = (xpixel-Window.getX(0))/xdelta;
-//        int zrow = (ypixel-Window.getY(0))/ydelta;
-//        
-////        if (ship[zrow][zcol][BoardSel] != null)
-////                   return;
-//        
-////        shipSize--;
-//        if (shipSize == 1)
-//        {
-//            Player.SwitchTurn();
-//            shipSize = 6;
-//        }
-////        System.out.println(shipSize+"");
-//        
-//    } 
+
     public static int getshipSize(){
         return(shipSize);
     }
