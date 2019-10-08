@@ -76,7 +76,7 @@ public class Scout {
     }
     public static void scoutCount(){
         scoutCount++;
-        if (scoutCount == 2)
+        if (scoutCount == 1)
         {
             scoutActive = true;
         }
@@ -113,21 +113,21 @@ public class Scout {
         if (keyPressed == 1){
             if (scoutRow-1 < 0)
                 validMovement = false;
-            if (validMovement && scoutMoved < 2)
+            if (validMovement && scoutMoved < 5)
                 scoutRow--;
             sub[scoutRow][scoutCol][Board.BoardSel()] = new Piece (Color.green);
         }
         else if (keyPressed == 2){
             if (scoutCol-1 < 0)
                 validMovement = false;
-            if (validMovement && scoutMoved < 2)
+            if (validMovement && scoutMoved < 5)
                 scoutCol--;
             sub[scoutRow][scoutCol][Board.BoardSel()] = new Piece (Color.green);
         }
         else if (keyPressed == 3){
             if (scoutRow+1 > Board.getNUM_ROWS()-1)
                 validMovement = false;
-            if (validMovement && scoutMoved < 2)
+            if (validMovement && scoutMoved < 5)
                 scoutRow++;
             sub[scoutRow][scoutCol][Board.BoardSel()] = new Piece (Color.green);
         }
@@ -137,7 +137,7 @@ public class Scout {
                 validMovement = false;
                 System.out.println("wow");
             }
-            if (validMovement && scoutMoved < 2)
+            if (validMovement && scoutMoved < 5)
                 scoutCol++;
             sub[scoutRow][scoutCol][Board.BoardSel()] = new Piece (Color.green);
         }
@@ -145,10 +145,25 @@ public class Scout {
             scoutMoved++;
     }
     public static void scoutShoot(){
-        if (sub[scoutRow][scoutCol][Board.BoardSel()] != null)
+        if (ship[scoutRow][scoutCol][Board.BoardSel()] != null)
+        {
             ship[scoutRow][scoutCol][Board.BoardSel()] = new Piece (Color.gray);
+        }
+        sub[scoutRow][scoutCol][Board.BoardSel()] = null;
+        scoutActive = false;
+    }
+    public static void Reset(){
+        scoutActive = false;
+        scoutPlaced = false;
+        scoutCount = 0;
+        for(int b=0;b<2;b++)
+        for (int zrow=0;zrow<Board.getNUM_ROWS();zrow++)
+            for (int zcol=0;zcol<Board.getNUM_COLUMNS();zcol++)
+                sub[zrow][zcol][b] = null;
     }
     public static void Draw(Graphics2D g, Battleship thisObj) {
+        if (!scoutActive)
+            return;
         for (int zrow=0;zrow<Board.getNUM_ROWS();zrow++)
         {
             for (int zcol=0;zcol<Board.getNUM_COLUMNS();zcol++){
