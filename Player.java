@@ -11,51 +11,40 @@ public class Player {
     public static void Reset()
     {
         
-        if (players[0] == null)
-        {
+        if (players[0] == null){
             players[0] = new Player(Color.red);
             players[1] = new Player(Color.black);
             players[2] = new Player(Color.gray);
-
-            
         }
         currentTurn = players[0];
         
     }
     
     
-    public static Player GetCurrentPlayer()
-    {
+    public static Player GetCurrentPlayer() {
         return(currentTurn);
     }
-    public static Player getPlayer1()
-    {
+    public static Player getPlayer1(){
         return(players[0]);
     }
-    public static Player getPlayer2()
-    {
+    public static Player getPlayer2(){
         return(players[1]);
     }
-    public static Player getPlayer3()
-    {
+    public static Player getPlayer3() {
         return(players[2]);
     }
-    public static void SwitchTurn()
-    {
+    public static void SwitchTurn(){
         Scout.scoutCount();
-
         if(currentTurn == players[0])
             currentTurn = players[1];
         else if(currentTurn == players[1])
             currentTurn = players[0];        
     }    
-    Player(Color _color)
-    {
+    Player(Color _color) {
         color = _color;
         
     }
-    public Color getColor()
-    {
+    public Color getColor(){
         return (color);
     }
 
