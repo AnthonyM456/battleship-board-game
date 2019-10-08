@@ -34,10 +34,11 @@ public class Piece {
     private static Image sub_redV;
     private static Image carrier_blueV;
     private static Image carrier_redV;
-    private static Image sub_redRight;
-    private static Image sub_redDown;
-    private static Image sub_blueRight;    
-    private static Image sub_blueDown;    
+    private static Image scoutRight;    
+    private static Image scoutDown; 
+    private static Image scoutUp;
+    private static Image scoutLeft;
+
 
     
     private static Image X;
@@ -86,20 +87,20 @@ public class Piece {
             else if (color == Color.gray)  //draw X
                 g.drawImage(X,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);
             else if (color == Color.white){
-                g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
+//                g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
             }
             else if (color == Color.green){ //scout ship
                 if (Scout.scoutDirection() == 0){ //up W
-                g.drawImage(sub_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                g.drawImage(scoutUp,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
                 else if (Scout.scoutDirection() == 1){ //left A
-                    g.drawImage(sub_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                    g.drawImage(scoutLeft,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
                 else if (Scout.scoutDirection() == 2){ //down S
-                    g.drawImage(sub_redDown,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                    g.drawImage(scoutDown,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
                 else if (Scout.scoutDirection() == 3){ //right D
-                    g.drawImage(sub_redRight,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                    g.drawImage(scoutRight,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
             }
         }
@@ -135,21 +136,21 @@ public class Piece {
                 g.drawImage(X,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);
             else if (color == Color.white)
             {
-                g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
+//                g.fillOval(Window.getX(column*xdelta), Window.getY(row*ydelta),xdelta,ydelta);
             }
             else if (color == Color.green)
             {
                 if (Scout.scoutDirection() == 0){ //up W
-                g.drawImage(sub_redV,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                g.drawImage(scoutUp,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
                 else if (Scout.scoutDirection() == 1){ //left A
-                    g.drawImage(sub_red,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                    g.drawImage(scoutLeft,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
                 else if (Scout.scoutDirection() == 2){ //down S
-                    g.drawImage(sub_redDown,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                    g.drawImage(scoutDown,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
                 else if (Scout.scoutDirection() == 3){ //right D
-                    g.drawImage(sub_redRight,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
+                    g.drawImage(scoutRight,Window.getX(0)+xdelta*column, Window.getY(0)+ydelta*row,xdelta,ydelta,thisObj);    
                 }
             }
 
@@ -194,11 +195,10 @@ public class Piece {
         sub_blueV = Toolkit.getDefaultToolkit().getImage("./sub_blueV.png");  
         sub_redV = Toolkit.getDefaultToolkit().getImage("./sub_redV.png");    
         
-        sub_blueRight = Toolkit.getDefaultToolkit().getImage("./sub_blueRight.png");  
-        sub_redRight = Toolkit.getDefaultToolkit().getImage("./sub_redRight.png");    
-        
-        sub_blueDown = Toolkit.getDefaultToolkit().getImage("./sub_blueDown.png");  
-        sub_redDown = Toolkit.getDefaultToolkit().getImage("./sub_redDown.png");    
+        scoutRight = Toolkit.getDefaultToolkit().getImage("./scoutRight.png");        
+        scoutDown = Toolkit.getDefaultToolkit().getImage("./scoutDown.png");  
+        scoutUp = Toolkit.getDefaultToolkit().getImage("./scoutUp.png");    
+        scoutLeft = Toolkit.getDefaultToolkit().getImage("./scoutLeft.png");    
         
         X = Toolkit.getDefaultToolkit().getImage("./XPixel.png");
     }
