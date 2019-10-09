@@ -46,12 +46,14 @@ public class Menu {
             
             g.setColor(Color.WHITE);    //start text
             g.setFont(new Font("High Tower Text",Font.BOLD,60));
-            g.drawString("START", 40+getX(),490+getY());     
+            g.drawString("START", 39+getX(),490+getY());     
             
             g.setColor(Color.WHITE);    //How to play text
             g.setFont(new Font("High Tower Text",Font.BOLD,45));
             g.drawString("HOW TO ", 370,460+getY());   
-            g.drawString("PLAY ", 400,515+getY());
+            g.drawString("PLAY ", 410,515+getY());
+            
+//            Levels.SwitchLevel();
         }
         if (tutorial)          // if you clicked "how to play"
         {
@@ -64,27 +66,32 @@ public class Menu {
             g.fillRect((4*xdelta)+(xdelta/2)+getX(),403+Window.getY(0),3*xdelta,2*ydelta);
             
             g.setColor(Color.WHITE);
-            g.setFont(new Font("High Tower Text",Font.BOLD,45));
+            g.setFont(new Font("Arial",Font.BOLD,50));
             g.drawString("RETURN", 370,460+getY());
             g.drawImage(ReturnTXT,590,465+getY(),-230,70,thisObj);
+            g.setFont(new Font("High Tower Text",Font.PLAIN,30));
+            g.drawString("Place ship:  LEFT CLICK",20,getY());
+            g.drawString("Rotate ship:  R", 20,30+getY());
+            g.drawString("Scout Ship movement: WASD", 20,60+getY());
+            g.drawString("Destroy ship:  SPACE", 20,90+getY());
             
-            g.setFont(new Font("High Tower Text",Font.PLAIN,20));
-            g.drawString("Place ship/ Destroy ship:  LEFT CLICK",20,getY());
-            g.drawString("Rotate ship:  R", 20,20+getY());
-            g.drawString("Scout Ship movement: WASD", 20,40+getY());
-            g.drawString("Scout Ship destroy:  SPACE", 20,60+getY());
-            g.drawString("Each player has 5 ships to place.", 20,100+getY());
-            g.drawString("After each player places all their ships, the battle begins.", 20,120+getY());
-            g.drawString("To play the game, you must guess where the other player's ships are,", 20,160+getY());
-            g.drawString("and destroy them by pressing LEFT CLICK. Destroy all ships to win!", 20,180+getY());
-            g.drawString("If you destroy a piece of a ship, your turn continues.", 20,220+getY());
-            g.drawString("If you miss, the other player's turn begins.", 20,240+getY());
-            g.drawString("SCOUT SHIP:", 20,280+getY());
-            g.drawString("After TWO TURNS (for each player), you get a SCOUT SHIP.", 20,300+getY());
-            g.drawString("The scout ship can only move 5 times, so place it wisely.", 20,320+getY());
-            g.drawString("Move the scout ship with WASD.", 20,340+getY());
-            g.drawString("Press SPACE to destroy the ship you are under.", 20,360+getY());
-
+            g.setFont(new Font("High Tower Text",Font.BOLD,40));
+            g.drawString("PHASE 1: Ship Placement", 20,160+getY());
+            g.setFont(new Font("High Tower Text",Font.PLAIN,21));
+            g.drawString("Each player has 5 battleships to place.", 20,190+getY());
+            g.drawString("Make sure your opponent doesn't see where you place your ships.", 20,210+getY());
+            
+            g.setFont(new Font("High Tower Text",Font.BOLD,40));
+            g.drawString("PHASE 2: Seek and Destroy.", 20,270+getY());
+            g.setFont(new Font("High Tower Text",Font.PLAIN,21));
+            g.drawString("To play the game, you must place your SCOUT SHIP,", 20,300+getY());
+            g.drawString("guess where your opponent's battleships are by moving with WASD,", 20,320+getY());
+            g.drawString("and destroy them by pressing SPACE. Destroy all ships to win!", 20,340+getY());
+            g.drawString("If you destroy a piece of a ship, your turn continues.", 20,360+getY());
+            g.drawString("If you miss, the other player's turn begins. Good Luck!", 20,380+getY());
+           
+            
+//            Levels.SwitchLevel();
         }
 
     }
@@ -122,6 +129,13 @@ public class Menu {
     public static boolean gameStart(){
         return(gameStart);
     }
+    public static boolean tutorial(){
+        return(tutorial);
+    }
+    
+    public static void GSSwitch(){
+        gameStart = false;
+    }
     public static void checkClick(int xpixel, int ypixel)
     {
         int xdelta = Board.xdelta();
@@ -129,18 +143,24 @@ public class Menu {
         int zcol = (xpixel-Window.getX(0));
         int zrow = (ypixel-Window.getY(0));
 //        System.out.println(zcol+  " " + zrow);
-        if (zcol > 35 && zcol < 265 && zrow > 400 && zrow < 540){
-//            System.out.println("start"); 
-            gameStart = true;
-        }
-        else if (zcol > 335 && zcol < 565 && zrow > 400 && zrow < 540 && !gameStart)
-        {
-//            System.out.println("howtoplay");
-            if (tutorial)
-                tutorial = false;
-            else 
-                tutorial = true;
-        }
+            if (zcol > 35 && zcol < 265 && zrow > 400 && zrow < 540){
+//                System.out.println("Started Game"); 
+                gameStart = true;
+                
+                Levels.SwitchLevel();
+            }
+            else if (zcol > 335 && zcol < 565 && zrow > 400 && zrow < 540 && !gameStart)
+            {
+//                System.out.println("How to Play");
+                if (tutorial)
+                    tutorial = false;
+                else 
+                    tutorial = true;
+                
+                Levels.SwitchLevel();
+            }
+        
+        
         
     }
     
